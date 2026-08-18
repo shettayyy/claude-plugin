@@ -43,17 +43,21 @@ servers per machine with `claude mcp add`.
 # 1. edit whatever changed
 # 2. bump "version" in plugins/tools/.claude-plugin/plugin.json
 git add -A && git commit -m "feat: ..." && git push
-claude plugin tag ./plugins/tools --push
 ```
 
 Then on the other laptop:
 
 ```bash
-claude plugin update tools
+claude plugin marketplace update claude-tools
+claude plugin update tools@claude-tools
 ```
 
-Restart Claude Code. The version bump is required — `claude plugin tag`
-refuses to tag a version that already exists.
+Restart Claude Code. The version bump matters: `claude plugin update` compares
+the installed version against the one in `plugin.json`.
+
+Tagging is optional. `claude plugin tag ./plugins/tools --push` creates a
+`tools--v<version>` tag, but tags are only read for dependency version
+constraints, which this plugin has none of.
 
 ## Layout
 
