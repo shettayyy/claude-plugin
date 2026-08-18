@@ -1,6 +1,6 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
-  "name": "shettayyy",
+  "name": "claude-plugin",
   "owner": {
     "name": "Rahul Shetty",
     "email": "shettyrahul8june@gmail.com",
@@ -9,8 +9,8 @@
   "description": "Rahul Shetty's personal Claude Code plugins.",
   "plugins": [
     {
-      "name": "claude-tools",
-      "source": "./plugins/claude-tools",
+      "name": "shettayyy",
+      "source": "./plugins/shettayyy",
       "description": "Personal skills, agents, and global config sync across machines.",
       "category": "productivity",
       "tags": ["personal", "config", "sync", "dotfiles"]

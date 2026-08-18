@@ -1,12 +1,12 @@
-# claude-tools
+# claude-plugin
 
 My personal Claude Code setup, packaged as a plugin so every laptop runs the same skills, agents, and global rules.
 
 ## Install on a new machine
 
 ```bash
-claude plugin marketplace add shettayyy/claude-tools
-claude plugin install claude-tools@shettayyy
+claude plugin marketplace add shettayyy/claude-plugin
+claude plugin install shettayyy@claude-plugin
 ```
 
 Restart Claude Code. On the next session start the plugin writes its versioned config into the machine's global config, so there is nothing to copy by hand.
@@ -15,10 +15,10 @@ Restart Claude Code. On the next session start the plugin writes its versioned c
 
 | Repo path | Lands at | How |
 | --- | --- | --- |
-| `plugins/claude-tools/skills/` | `/claude-tools:<name>` | loaded by the plugin |
-| `plugins/claude-tools/agents/` | `@claude-tools:<name>` | loaded by the plugin |
-| `plugins/claude-tools/config/claude-rules.md` | `~/.claude/CLAUDE.md` | full overwrite |
-| `plugins/claude-tools/config/managed-settings.json` | `~/.claude/settings.json` | `permissions.deny` merged in |
+| `plugins/shettayyy/skills/` | `/shettayyy:<name>` | loaded by the plugin |
+| `plugins/shettayyy/agents/` | `@shettayyy:<name>` | loaded by the plugin |
+| `plugins/shettayyy/config/claude-rules.md` | `~/.claude/CLAUDE.md` | full overwrite |
+| `plugins/shettayyy/config/managed-settings.json` | `~/.claude/settings.json` | `permissions.deny` merged in |
 
 `~/.claude/CLAUDE.md` is fully owned by this repo. Anything written to it directly on a machine, including memory saved with `#`, is replaced the next time the rules change upstream. Edit `config/claude-rules.md` instead.
 
@@ -32,7 +32,7 @@ A plugin can ship a root `settings.json`, but only the `agent` and `subagentStat
 
 ## Shipping a change
 
-Bump `version` in `plugins/claude-tools/.claude-plugin/plugin.json`, then:
+Bump `version` in `plugins/shettayyy/.claude-plugin/plugin.json`, then:
 
 ```bash
 git add -A && git commit -m "feat: ..." && git push
@@ -41,18 +41,18 @@ git add -A && git commit -m "feat: ..." && git push
 On the other laptop:
 
 ```bash
-claude plugin marketplace update shettayyy
-claude plugin update claude-tools@shettayyy
+claude plugin marketplace update claude-plugin
+claude plugin update shettayyy@claude-plugin
 ```
 
 Restart Claude Code. The version bump is what drives updates: `claude plugin update` compares the installed version against the one in `plugin.json`.
 
-Tagging is optional. `claude plugin tag ./plugins/claude-tools --push` creates a `claude-tools--v<version>` tag, but tags are only read for dependency version constraints, which this plugin has none of.
+Tagging is optional. `claude plugin tag ./plugins/shettayyy --push` creates a `shettayyy--v<version>` tag, but tags are only read for dependency version constraints, which this plugin has none of.
 
 ## Local development
 
 ```bash
-claude --plugin-dir ./plugins/claude-tools
+claude --plugin-dir ./plugins/shettayyy
 ```
 
 This loads the working copy without installing it, and takes precedence over the installed plugin of the same name for that session. Run `/reload-plugins` to pick up edits without restarting.
@@ -60,14 +60,14 @@ This loads the working copy without installing it, and takes precedence over the
 Validate before pushing:
 
 ```bash
-claude plugin validate ./plugins/claude-tools && claude plugin validate .
+claude plugin validate ./plugins/shettayyy && claude plugin validate .
 ```
 
 ## Layout
 
 ```
-.claude-plugin/marketplace.json      marketplace manifest, name "shettayyy"
-plugins/claude-tools/
+.claude-plugin/marketplace.json      marketplace manifest, name "claude-plugin"
+plugins/shettayyy/
   .claude-plugin/plugin.json         plugin manifest, holds the version
   skills/<name>/SKILL.md             skills and slash commands
   agents/                            subagents

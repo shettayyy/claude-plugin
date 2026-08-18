@@ -1,21 +1,16 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-plugin-manifest.json",
-  "name": "claude-tools",
-  "displayName": "Claude Tools",
-  "version": "0.3.1",
+  "name": "shettayyy",
+  "displayName": "Shettayyy",
+  "version": "0.4.0",
   "description": "Personal skills, agents, and global config sync across machines.",
   "author": {
     "name": "Rahul Shetty",
     "email": "shettyrahul8june@gmail.com",
     "url": "https://github.com/shettayyy"
   },
-  "homepage": "https://github.com/shettayyy/claude-tools",
-  "repository": "https://github.com/shettayyy/claude-tools",
+  "homepage": "https://github.com/shettayyy/claude-plugin",
+  "repository": "https://github.com/shettayyy/claude-plugin",
   "license": "MIT",
-  "keywords": [
-    "personal",
-    "config",
-    "sync",
-    "dotfiles"
-  ]
+  "keywords": ["personal", "config", "sync", "dotfiles"]
 }

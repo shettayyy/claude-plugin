@@ -89,10 +89,10 @@ try {
   syncRules();
   syncSettings();
   if (changed.length > 0) {
-    console.log(`[claude-tools] synced global config: ${changed.join(', ')}`);
+    console.log(`[shettayyy] synced global config: ${changed.join(', ')}`);
   }
 } catch (error) {
-  console.error(`[claude-tools] config sync skipped: ${error.message}`);
+  console.error(`[shettayyy] config sync skipped: ${error.message}`);
 }
 
 process.exit(0);
