@@ -1,17 +1,19 @@
 {
-  "name": "claude-tools",
+  "$schema": "https://json.schemastore.org/claude-code-marketplace.json",
+  "name": "shettayyy",
   "owner": {
     "name": "Rahul Shetty",
-    "email": "shettyrahul8june@gmail.com"
+    "email": "shettyrahul8june@gmail.com",
+    "url": "https://github.com/shettayyy"
   },
-  "metadata": {
-    "description": "Rahul Shetty's personal Claude Code setup, versioned and synced across machines."
-  },
+  "description": "Rahul Shetty's personal Claude Code plugins.",
   "plugins": [
     {
-      "name": "tools",
-      "source": "./plugins/tools",
-      "description": "Personal slash commands, skills, agents, and global config sync."
+      "name": "claude-tools",
+      "source": "./plugins/claude-tools",
+      "description": "Personal skills, agents, and global config sync across machines.",
+      "category": "productivity",
+      "tags": ["personal", "config", "sync", "dotfiles"]
     }
   ]
 }
