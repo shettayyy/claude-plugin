@@ -17,8 +17,7 @@ config into the machine's global config, so there is nothing to copy by hand.
 
 | Repo file | Lands at | How |
 | --- | --- | --- |
-| `plugins/tools/commands/` | slash commands | loaded by the plugin directly |
-| `plugins/tools/skills/` | skills | loaded by the plugin directly |
+| `plugins/tools/skills/` | slash commands / skills | loaded by the plugin directly |
 | `plugins/tools/agents/` | subagents | loaded by the plugin directly |
 | `plugins/tools/config/claude-rules.md` | `~/.claude/CLAUDE.md` | full overwrite |
 | `plugins/tools/config/managed-settings.json` | `~/.claude/settings.json` | `permissions.deny` merged in |
@@ -62,8 +61,7 @@ refuses to tag a version that already exists.
 .claude-plugin/marketplace.json     marketplace manifest (this repo)
 plugins/tools/
   .claude-plugin/plugin.json        plugin manifest, holds the version
-  commands/                         slash commands
-  skills/                           skills
+  skills/                           slash commands and skills
   agents/                           subagents
   hooks/hooks.json                  registers the SessionStart hook
   hooks/sync-config.mjs             applies config/ to the global config

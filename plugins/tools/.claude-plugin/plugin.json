@@ -1,6 +1,6 @@
 {
   "name": "tools",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Personal slash commands, skills, agents, and global config sync.",
   "author": {
     "name": "Rahul Shetty",
@@ -8,6 +8,10 @@
   },
   "repository": "https://github.com/shettayyy/claude-tools",
   "license": "MIT",
-  "keywords": ["personal", "config", "sync", "dotfiles"],
-  "commands": ["./commands/commit-msg.md"]
+  "keywords": [
+    "personal",
+    "config",
+    "sync",
+    "dotfiles"
+  ]
 }

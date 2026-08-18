@@ -1,5 +1,6 @@
 ---
-description: Generate a single commit message for the uncommitted changes in this repo, following commitlint config if present.
+name: commit-msg
+description: Generate a single commit message for the uncommitted changes in this repo. Follows the project's commitlint config when one exists, otherwise Conventional Commits.
 ---
 
 Look at the uncommitted changes in this repo and generate a single commit message.
