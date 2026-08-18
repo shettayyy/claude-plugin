@@ -1,0 +1,17 @@
+{
+  "name": "claude-tools",
+  "owner": {
+    "name": "Rahul Shetty",
+    "email": "shettyrahul8june@gmail.com"
+  },
+  "metadata": {
+    "description": "Rahul Shetty's personal Claude Code setup, versioned and synced across machines."
+  },
+  "plugins": [
+    {
+      "name": "tools",
+      "source": "./plugins/tools",
+      "description": "Personal slash commands, skills, agents, and global config sync."
+    }
+  ]
+}
