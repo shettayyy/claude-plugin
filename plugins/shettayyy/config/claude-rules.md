@@ -2,27 +2,19 @@
 
 ## Package Manager & System Package Safety
 
-Never upgrade or modify system-level package managers or runtimes (pnpm, npm, yarn, pip, python, node) without explicit user approval. This includes:
+Never upgrade or modify system-level package managers or runtimes (pnpm, npm, yarn, pip, python, node) without explicit user approval.
 
-- Version bumps in `package.json`, `pyproject.toml`, or similar manifest files
-- Reinstalling or switching package managers
-- Running `corepack enable/use`, `npm install -g`, `pip install --upgrade`, or equivalent commands targeting global/system tools
-
-Always ask before touching these. A broken system package manager can break all projects at once.
+A broken system package manager can break all projects at once.
 
 ## Memory Storage Rules
 
-- **Project memories** belong in `.claude/memory/` inside the project repo, committed to git and shared with team members.
-- **Global rules and preferences** belong in `~/.claude/CLAUDE.md`.
-- **Plans** belong in `.claude/plans/` inside the project repo. Never write plan files to `~/.claude/plans/` or anywhere under `~/.claude/`.
-- Never use `~/.claude/projects/` for user-managed memories. That is Claude Code's internal session storage, not a shareable location.
-- Never create, modify, or delete anything under `~/.claude/` without the user explicitly asking for it.
+- Try to update the local claude project memories i.e if the project name is galaxy, update galaxy/.claude/<whatever needs to be updates as per claude conventions> instead of polluting the global claude workspace i.e ~/.claude.
+- If global ~/.claude config needs to be updated, ask for user's permission before doing so.
 
 ## Git & Commit Rules
 
 - Never add co-author trailers or any messages indicating Claude was involved in commits. All commits should reflect only the user's authorship in git history.
 - Do not include `Co-authored-by`, `Co-committed-by`, or similar trailers in commit messages on the user's behalf.
-- The user's git history should never reveal that Claude was involved in any commits.
 
 ## Communication
 
@@ -51,6 +43,5 @@ Surface uncertainty proportional to the blast radius of the change. Silent overc
 
 ## Project Workspace
 
-- All project work must be created under `~/localshiva/` — this is the designated project space.
 - Never create project files or directories under `~/.claude/`, `/home/claude/`, or any other location without explicit permission.
 - If a project location is not specified, ask before creating anything. Do not assume a path.
