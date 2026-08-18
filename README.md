@@ -44,7 +44,7 @@ servers per machine with `claude mcp add`.
 # 1. edit whatever changed
 # 2. bump "version" in plugins/tools/.claude-plugin/plugin.json
 git add -A && git commit -m "feat: ..." && git push
-claude plugin tag --push
+claude plugin tag ./plugins/tools --push
 ```
 
 Then on the other laptop:
