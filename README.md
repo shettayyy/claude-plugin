@@ -114,7 +114,11 @@ pnpm run check && pnpm run validate
 
 Commits follow [Conventional Commits](https://www.conventionalcommits.org/) and should be atomic: one logical change each, with a diff limited to what the message describes.
 
-**If you changed anything under `plugins/shettayyy/config/` or `skills/`, bump `version` in `plugins/shettayyy/.claude-plugin/plugin.json` in the same commit.** Nothing enforces this yet, and without the bump `claude plugin update` sees no change, so the edit never reaches any other machine.
+**If you changed anything under `plugins/shettayyy/config/`, `skills/`, or `agents/`, bump `version` in `plugins/shettayyy/.claude-plugin/plugin.json` in the same commit.** Without the bump nothing propagates, since both the manual and automatic update paths compare versions. The `version-bump` CI job enforces this and fails the build if you forget, so check it locally first:
+
+```bash
+pnpm run check:version
+```
 
 ## Layout
 
