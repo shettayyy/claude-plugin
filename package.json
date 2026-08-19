@@ -17,7 +17,8 @@
     "format": "biome format . --write",
     "check": "biome check .",
     "check:fix": "biome check . --write",
-    "check:version": "node scripts/check-version-bump.mjs origin/main HEAD"
+    "check:version": "node scripts/check-version-bump.mjs origin/main HEAD",
+    "test": "node --test scripts/*.test.mjs"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.9"

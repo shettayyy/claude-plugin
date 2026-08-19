@@ -26,6 +26,7 @@ jobs:
           install: false
       - run: pnpm install --frozen-lockfile
       - run: pnpm run check
+      - run: pnpm run test
 
   plugin-validate:
     runs-on: ubuntu-latest

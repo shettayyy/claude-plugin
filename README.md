@@ -82,6 +82,7 @@ This project uses pnpm only. A `preinstall` guard fails the install if you reach
 | `pnpm run lint` | Lint only |
 | `pnpm run format` | Format only, writes in place |
 | `pnpm run validate` | Runs `claude plugin validate` on the plugin and the marketplace |
+| `pnpm run test` | Runs the sync-hook tests with `node --test`. CI runs this too. |
 
 Formatting is pinned in `biome.json` to 2-space indent and single quotes, deliberately overriding Biome's tab default so the config files stay diff-stable.
 
@@ -109,7 +110,7 @@ It prints a line naming what it wrote, and prints nothing when everything alread
 ### Before you push
 
 ```bash
-pnpm run check && pnpm run validate
+pnpm run check && pnpm run test && pnpm run validate
 ```
 
 Commits follow [Conventional Commits](https://www.conventionalcommits.org/) and should be atomic: one logical change each, with a diff limited to what the message describes.
