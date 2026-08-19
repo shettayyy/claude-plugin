@@ -11,13 +11,14 @@
   },
   "scripts": {
     "preinstall": "npx only-allow pnpm",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "validate": "claude plugin validate ./plugins/shettayyy && claude plugin validate ."
+    "lint": "biome lint .",
+    "lint:fix": "biome lint . --write",
+    "validate": "claude plugin validate ./plugins/shettayyy && claude plugin validate .",
+    "format": "biome format . --write",
+    "check": "biome check .",
+    "check:fix": "biome check . --write"
   },
   "devDependencies": {
-    "@eslint/js": "^9.17.0",
-    "eslint": "^9.17.0",
-    "globals": "^15.14.0"
+    "@biomejs/biome": "^2.5.9"
   }
 }
