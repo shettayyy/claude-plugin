@@ -8,5 +8,14 @@
       "Bash(**/.env)",
       "Bash(**/.env.*)"
     ]
+  },
+  "extraKnownMarketplaces": {
+    "claude-plugin": {
+      "source": {
+        "source": "github",
+        "repo": "shettayyy/claude-plugin"
+      },
+      "autoUpdate": true
+    }
   }
 }

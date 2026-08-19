@@ -77,10 +77,63 @@ function syncRules() {
 }
 
 /**
- * Merges this plugin's deny rules into the global settings.json.
+ * Adds any missing deny rules to a settings object, in place.
  *
- * Only adds entries. Local keys such as theme, model, and
- * effortLevel are never read or rewritten.
+ * @param {Record<string, unknown>} settings Parsed settings.json.
+ * @param {string[]} wanted Deny rules this plugin requires.
+ * @returns {string | null} A summary of what changed, or null.
+ */
+function applyDenyRules(settings, wanted) {
+  if (!Array.isArray(wanted) || wanted.length === 0) return null;
+
+  const current = settings.permissions?.deny;
+  const deny = Array.isArray(current) ? current : [];
+  const missing = wanted.filter((rule) => !deny.includes(rule));
+  if (missing.length === 0) return null;
+
+  settings.permissions = { ...settings.permissions, deny: [...deny, ...missing] };
+  return `+${missing.length} deny`;
+}
+
+/**
+ * Applies declared marketplace entries to a settings object, in place.
+ *
+ * Each declared entry is shallow-merged over whatever is already
+ * there, so `autoUpdate` reaches a machine that registered the
+ * marketplace before the flag existed.
+ *
+ * Marketplaces this plugin does not declare are left untouched.
+ *
+ * @param {Record<string, unknown>} settings Parsed settings.json.
+ * @param {Record<string, object>} wanted Marketplace entries to apply.
+ * @returns {string | null} A summary of what changed, or null.
+ */
+function applyMarketplaces(settings, wanted) {
+  if (!wanted || typeof wanted !== 'object') return null;
+
+  const existing = settings.extraKnownMarketplaces ?? {};
+  const merged = { ...existing };
+  const updated = [];
+
+  for (const [name, entry] of Object.entries(wanted)) {
+    const candidate = { ...existing[name], ...entry };
+    if (JSON.stringify(candidate) === JSON.stringify(existing[name])) continue;
+
+    merged[name] = candidate;
+    updated.push(name);
+  }
+
+  if (updated.length === 0) return null;
+
+  settings.extraKnownMarketplaces = merged;
+  return `marketplaces: ${updated.join(', ')}`;
+}
+
+/**
+ * Merges this plugin's managed settings into the global settings.json.
+ *
+ * Only adds or updates what this plugin declares. Local keys such as
+ * theme, model, and effortLevel are never read or rewritten.
  *
  * @returns {void}
  */
@@ -94,9 +147,6 @@ function syncSettings() {
   } catch {
     return;
   }
-
-  const wanted = managed?.permissions?.deny;
-  if (!Array.isArray(wanted) || wanted.length === 0) return;
 
   const target = join(configDir, 'settings.json');
   const existingRaw = read(target);
@@ -114,14 +164,15 @@ function syncSettings() {
     }
   }
 
-  const current = settings.permissions?.deny;
-  const deny = Array.isArray(current) ? current : [];
-  const missing = wanted.filter((rule) => !deny.includes(rule));
-  if (missing.length === 0) return;
+  const summaries = [
+    applyDenyRules(settings, managed?.permissions?.deny),
+    applyMarketplaces(settings, managed?.extraKnownMarketplaces),
+  ].filter(Boolean);
 
-  settings.permissions = { ...settings.permissions, deny: [...deny, ...missing] };
+  if (summaries.length === 0) return;
+
   writeAtomic(target, `${JSON.stringify(settings, null, 2)}\n`);
-  changed.push(`settings.json (+${missing.length} deny)`);
+  changed.push(`settings.json (${summaries.join('; ')})`);
 }
 
 try {
