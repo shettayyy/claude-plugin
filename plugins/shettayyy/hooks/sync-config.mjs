@@ -97,13 +97,21 @@ function applyDenyRules(settings, wanted, obsolete) {
   const deny = Array.isArray(current) ? current : [];
 
   const kept = deny.filter((rule) => !retired.includes(rule));
-  const removedCount = deny.length - kept.length;
-
   const missing = required.filter((rule) => !kept.includes(rule));
-  if (missing.length === 0 && removedCount === 0) return null;
+  const next = [...kept, ...missing];
 
-  settings.permissions = { ...settings.permissions, deny: [...kept, ...missing] };
+  /**
+   * Compare the result rather than the counts. A rule listed as both
+   * required and retired is removed and re-added in the same pass,
+   * which nets out to no change. Reporting that as a change would
+   * rewrite settings.json on every session, forever.
+   */
+  const unchanged = next.length === deny.length && next.every((rule, i) => rule === deny[i]);
+  if (unchanged) return null;
 
+  settings.permissions = { ...settings.permissions, deny: next };
+
+  const removedCount = deny.length - kept.length;
   const parts = [];
   if (missing.length > 0) parts.push(`+${missing.length}`);
   if (removedCount > 0) parts.push(`-${removedCount}`);

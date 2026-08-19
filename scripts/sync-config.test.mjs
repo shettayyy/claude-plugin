@@ -288,6 +288,22 @@ describe('obsolete deny rules', () => {
     assert.deepEqual(readSettings(sandbox).permissions.deny, ['A']);
   });
 
+  it('reports no change when a required rule is also listed obsolete', () => {
+    writeManaged(sandbox, {
+      permissions: { deny: ['A'] },
+      obsoleteDeny: ['A'],
+    });
+    writeSettings(sandbox, { permissions: { deny: ['A'] } });
+
+    const { stdout } = runHook(sandbox);
+
+    assert.equal(
+      stdout.trim(),
+      '',
+      'removing and re-adding the same rule nets out, so it must not rewrite every session',
+    );
+  });
+
   it('settles after one run when retiring rules', () => {
     writeManaged(sandbox, {
       permissions: { deny: ['Edit(**/.env)'] },
