@@ -88,9 +88,14 @@
   },
   "overrides": [
     {
-      "includes": ["**/*.mjs", "**/*.js"],
+      "includes": [
+        "**/*.mjs",
+        "**/*.js"
+      ],
       "javascript": {
-        "globals": ["exports"]
+        "globals": [
+          "exports"
+        ]
       }
     }
   ],
@@ -105,7 +110,8 @@
   "json": {
     "formatter": {
       "indentStyle": "space",
-      "indentWidth": 2
+      "indentWidth": 2,
+      "expand": "always"
     }
   }
 }

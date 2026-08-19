@@ -13,7 +13,12 @@
       "source": "./plugins/shettayyy",
       "description": "Personal skills, agents, and global config sync across machines.",
       "category": "productivity",
-      "tags": ["personal", "config", "sync", "dotfiles"]
+      "tags": [
+        "personal",
+        "config",
+        "sync",
+        "dotfiles"
+      ]
     }
   ]
 }

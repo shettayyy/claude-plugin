@@ -1,8 +1,18 @@
 {
   "permissions": {
-    "deny": ["Read(**/.env)", "Read(**/.env.*)", "Edit(**/.env)", "Edit(**/.env.*)"]
+    "deny": [
+      "Read(**/.env)",
+      "Read(**/.env.*)",
+      "Edit(**/.env)",
+      "Edit(**/.env.*)"
+    ]
   },
-  "obsoleteDeny": ["Write(**/.env)", "Write(**/.env.*)", "Bash(**/.env)", "Bash(**/.env.*)"],
+  "obsoleteDeny": [
+    "Write(**/.env)",
+    "Write(**/.env.*)",
+    "Bash(**/.env)",
+    "Bash(**/.env.*)"
+  ],
   "extraKnownMarketplaces": {
     "claude-plugin": {
       "source": {

@@ -84,7 +84,7 @@ This project uses pnpm only. A `preinstall` guard fails the install if you reach
 | `pnpm run validate` | Runs `claude plugin validate` on the plugin and the marketplace |
 | `pnpm run test` | Runs the sync-hook tests with `node --test`. CI runs this too. |
 
-Formatting is pinned in `biome.json` to 2-space indent and single quotes, deliberately overriding Biome's tab default so the config files stay diff-stable.
+Formatting is pinned in `biome.json` to 2-space indent and single quotes, deliberately overriding Biome's tab default so the config files stay diff-stable. JSON uses `expand: "always"` so arrays stay one-item-per-line instead of collapsing onto a single line whenever they happen to fit.
 
 ### Run your changes without installing
 
