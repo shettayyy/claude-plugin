@@ -16,7 +16,8 @@
     "validate": "claude plugin validate ./plugins/shettayyy && claude plugin validate .",
     "format": "biome format . --write",
     "check": "biome check .",
-    "check:fix": "biome check . --write"
+    "check:fix": "biome check . --write",
+    "check:version": "node scripts/check-version-bump.mjs origin/main HEAD"
   },
   "devDependencies": {
     "@biomejs/biome": "^2.5.9"

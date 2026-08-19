@@ -43,3 +43,20 @@ jobs:
         run: |
           pnpm dlx "@anthropic-ai/claude-code@$CLAUDE_CODE_VERSION" plugin validate ./plugins/shettayyy
           pnpm dlx "@anthropic-ai/claude-code@$CLAUDE_CODE_VERSION" plugin validate .
+
+  version-bump:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+        with:
+          fetch-depth: 0
+      - name: Install pnpm and Node.js
+        uses: pnpm/setup@84cb39b217b10273981911c288cd62326dc7c6d2 # v2.0.2
+        with:
+          runtime: node@22
+          install: false
+      - name: Require a version bump when synced content changes
+        env:
+          BASE_SHA: ${{ github.event_name == 'pull_request' && github.event.pull_request.base.sha || github.event.before }}
+        run: node scripts/check-version-bump.mjs "$BASE_SHA"
