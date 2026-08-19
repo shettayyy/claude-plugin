@@ -38,14 +38,18 @@ Bump `version` in `plugins/shettayyy/.claude-plugin/plugin.json`, then:
 git add -A && git commit -m "feat: ..." && git push
 ```
 
-On the other laptop:
+On the other laptop, either wait or pull it immediately.
+
+Auto-update is enabled for this marketplace, and the sync hook turns it on for every machine, so a pushed version arrives on its own. It is not instant: Claude Code checks after a session starts with a random delay of up to ten minutes, the running session keeps the version it launched with, and the new version then needs `/reload-plugins` or the next launch. Expect it within a couple of sessions rather than immediately.
+
+To pull it right now instead:
 
 ```bash
 claude plugin marketplace update claude-plugin
 claude plugin update shettayyy@claude-plugin
 ```
 
-Restart Claude Code. The version bump is what drives updates: `claude plugin update` compares the installed version against the one in `plugin.json`.
+Either way, the version bump is what drives updates: both paths compare the installed version against the one in `plugin.json`. Push without bumping and nothing propagates, which is what the `version-bump` CI job exists to catch.
 
 Tagging is optional. `claude plugin tag ./plugins/shettayyy --push` creates a `shettayyy--v<version>` tag, but tags are only read for dependency version constraints, which this plugin has none of.
 

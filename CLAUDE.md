@@ -10,7 +10,7 @@ A single-plugin Claude Code marketplace that distributes Rahul Shetty's personal
 
 - `.claude-plugin/marketplace.json` — marketplace manifest
 - `plugins/shettayyy/.claude-plugin/plugin.json` — plugin manifest (holds the version)
-- `plugins/shettayyy/config/` — the payload that gets synced: `claude-rules.md` → `~/.claude/CLAUDE.md`, `managed-settings.json` deny rules → `~/.claude/settings.json`
+- `plugins/shettayyy/config/` — the payload that gets synced: `claude-rules.md` → `~/.claude/CLAUDE.md`, and `managed-settings.json` deny rules plus `extraKnownMarketplaces` entries → `~/.claude/settings.json`
 - `plugins/shettayyy/hooks/` — `hooks.json` (SessionStart trigger) and `sync-config.mjs` (the sync logic; ES modules)
 - `plugins/shettayyy/skills/` — plugin skills (e.g. `commit-msg`)
 
@@ -47,7 +47,7 @@ claude plugin validate ./plugins/shettayyy && claude plugin validate .
 
 ## sync-config.mjs gotchas
 
-- **Additive merge only**: it adds missing deny rules; it never removes existing settings or touches `theme`, `model`, `effortLevel`, or `enabledPlugins`.
+- **Additive merge only**: it adds missing deny rules and shallow-merges declared `extraKnownMarketplaces` entries. It never removes existing settings, never touches marketplaces it does not declare, and never touches `theme`, `model`, `effortLevel`, or `enabledPlugins`.
 - **Next-session timing**: changes to synced rules take effect on the *next* session, not the current one.
 - **Atomic writes**: writes to a temp file then renames, to survive interruption.
 - **Malformed `~/.claude/settings.json` is skipped silently** so local machine prefs are never destroyed.
