@@ -16,12 +16,13 @@
 
 import { execFileSync } from 'node:child_process';
 
-/** Paths whose contents are distributed to other machines. */
-const WATCHED_PATHS = [
-  'plugins/shettayyy/config/',
-  'plugins/shettayyy/skills/',
-  'plugins/shettayyy/agents/',
-];
+/**
+ * Everything shipped inside the plugin reaches other machines, so the
+ * whole directory is watched rather than a hand-listed subset. An
+ * earlier list named only config/, skills/, and agents/, which let a
+ * hooks/ change ship without a bump and silently never propagate.
+ */
+const WATCHED_PREFIX = 'plugins/shettayyy/';
 
 const MANIFEST_PATH = 'plugins/shettayyy/.claude-plugin/plugin.json';
 const EMPTY_SHA = '0000000000000000000000000000000000000000';
@@ -74,8 +75,8 @@ const changedFiles = (git(['diff', '--name-only', `${base}`, `${head}`]) ?? '')
   .split('\n')
   .filter(Boolean);
 
-const touched = changedFiles.filter((file) =>
-  WATCHED_PATHS.some((prefix) => file.startsWith(prefix)),
+const touched = changedFiles.filter(
+  (file) => file.startsWith(WATCHED_PREFIX) && file !== MANIFEST_PATH,
 );
 
 if (touched.length === 0) {
