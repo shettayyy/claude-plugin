@@ -4,7 +4,13 @@
   "private": true,
   "type": "module",
   "description": "Personal Claude Code plugin marketplace (shettayyy).",
+  "packageManager": "pnpm@11.0.5",
+  "engines": {
+    "node": ">=22",
+    "pnpm": ">=11"
+  },
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "lint": "eslint .",
     "lint:fix": "eslint . --fix",
     "validate": "claude plugin validate ./plugins/shettayyy && claude plugin validate ."

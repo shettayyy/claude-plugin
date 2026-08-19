@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-A single-plugin Claude Code marketplace that distributes Rahul Shetty's personal config (rules, skills, deny permissions) across machines. On session start, the `shettayyy` plugin's hook syncs versioned files from `plugins/shettayyy/config/` into the machine's `~/.claude/`. There is no compiled application and no build/test/format toolchain.
+A single-plugin Claude Code marketplace that distributes Rahul Shetty's personal config (rules, skills, deny permissions) across machines. On session start, the `shettayyy` plugin's hook syncs versioned files from `plugins/shettayyy/config/` into the machine's `~/.claude/`. There is no compiled application. The only toolchain is ESLint for the hook script.
 
 ## Structure
 
@@ -13,6 +13,15 @@ A single-plugin Claude Code marketplace that distributes Rahul Shetty's personal
 - `plugins/shettayyy/config/` — the payload that gets synced: `claude-rules.md` → `~/.claude/CLAUDE.md`, `managed-settings.json` deny rules → `~/.claude/settings.json`
 - `plugins/shettayyy/hooks/` — `hooks.json` (SessionStart trigger) and `sync-config.mjs` (the sync logic; ES modules)
 - `plugins/shettayyy/skills/` — plugin skills (e.g. `commit-msg`)
+
+## Package manager
+
+This project uses **pnpm**, pinned via `packageManager` in `package.json`. Never run `npm install` or `yarn` here. A `preinstall` guard (`only-allow`) fails the install if you do.
+
+```bash
+pnpm install
+pnpm run lint
+```
 
 ## Validate
 

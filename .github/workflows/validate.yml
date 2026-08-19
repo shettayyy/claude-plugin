@@ -10,19 +10,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Install pnpm and Node.js
+        uses: pnpm/setup@84cb39b217b10273981911c288cd62326dc7c6d2 # v2.0.2
         with:
-          node-version: 22
-      - run: npm ci
-      - run: npm run lint
+          runtime: node@22
+          cache: true
+      - run: pnpm run lint
 
   plugin-validate:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
-      - uses: actions/setup-node@v4
+      - name: Install pnpm and Node.js
+        uses: pnpm/setup@84cb39b217b10273981911c288cd62326dc7c6d2 # v2.0.2
         with:
-          node-version: 22
-      - run: npm install -g @anthropic-ai/claude-code
-      - run: claude plugin validate ./plugins/shettayyy
-      - run: claude plugin validate .
+          runtime: node@22
+          install: false
+      - run: pnpm dlx @anthropic-ai/claude-code plugin validate ./plugins/shettayyy
+      - run: pnpm dlx @anthropic-ai/claude-code plugin validate .
