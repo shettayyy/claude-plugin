@@ -12,10 +12,5 @@
   "homepage": "https://github.com/shettayyy/claude-plugin",
   "repository": "https://github.com/shettayyy/claude-plugin",
   "license": "MIT",
-  "keywords": [
-    "personal",
-    "config",
-    "sync",
-    "dotfiles"
-  ]
+  "keywords": ["personal", "config", "sync", "dotfiles"]
 }
