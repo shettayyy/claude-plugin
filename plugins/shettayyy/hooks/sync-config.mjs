@@ -1,12 +1,18 @@
 #!/usr/bin/env node
-// Applies this plugin's versioned config to the machine's global Claude Code
-// config. Runs on SessionStart, which is the first moment after
-// `claude plugin update` takes effect (updates require a restart).
-//
-// - config/claude-rules.md      -> <config>/CLAUDE.md        (full overwrite)
-// - config/managed-settings.json -> <config>/settings.json   (deny rules merged)
-//
-// Never throws and always exits 0. A broken sync must not break the session.
+/**
+ * Applies this plugin's versioned config to the machine's global
+ * Claude Code config.
+ *
+ * Runs on SessionStart, which is the first moment after
+ * `claude plugin update` takes effect, since updates require a
+ * restart.
+ *
+ * - `config/claude-rules.md`       -> `<config>/CLAUDE.md`      (full overwrite)
+ * - `config/managed-settings.json` -> `<config>/settings.json`  (deny rules merged)
+ *
+ * Never throws and always exits 0. A broken sync must not break
+ * the session.
+ */
 
 import { readFileSync, writeFileSync, renameSync, mkdirSync } from 'node:fs';
 import { homedir } from 'node:os';
@@ -17,8 +23,15 @@ const pluginRoot =
   process.env.CLAUDE_PLUGIN_ROOT || dirname(dirname(fileURLToPath(import.meta.url)));
 const configDir = process.env.CLAUDE_CONFIG_DIR || join(homedir(), '.claude');
 
+/** @type {string[]} Names of the files this run actually rewrote. */
 const changed = [];
 
+/**
+ * Reads a file, treating any failure as absence.
+ *
+ * @param {string} path Absolute path to read.
+ * @returns {string | null} File contents, or null if unreadable.
+ */
 function read(path) {
   try {
     return readFileSync(path, 'utf8');
@@ -27,8 +40,16 @@ function read(path) {
   }
 }
 
-// Write via temp file + rename so an interrupted run cannot leave a
-// half-written settings.json behind.
+/**
+ * Writes through a temp file and renames it into place.
+ *
+ * An interrupted run must not leave a half-written settings.json
+ * behind, so the file only ever appears complete.
+ *
+ * @param {string} path Destination path.
+ * @param {string} contents Full file contents to write.
+ * @returns {void}
+ */
 function writeAtomic(path, contents) {
   mkdirSync(dirname(path), { recursive: true });
   const tmp = `${path}.tools-sync.tmp`;
@@ -36,6 +57,14 @@ function writeAtomic(path, contents) {
   renameSync(tmp, path);
 }
 
+/**
+ * Overwrites the global CLAUDE.md with this plugin's rules.
+ *
+ * The repo is the sole owner of that file, so the copy is
+ * wholesale rather than merged.
+ *
+ * @returns {void}
+ */
 function syncRules() {
   const source = read(join(pluginRoot, 'config', 'claude-rules.md'));
   if (source === null) return;
@@ -47,6 +76,14 @@ function syncRules() {
   changed.push('CLAUDE.md');
 }
 
+/**
+ * Merges this plugin's deny rules into the global settings.json.
+ *
+ * Only adds entries. Local keys such as theme, model, and
+ * effortLevel are never read or rewritten.
+ *
+ * @returns {void}
+ */
 function syncSettings() {
   const raw = read(join(pluginRoot, 'config', 'managed-settings.json'));
   if (raw === null) return;
@@ -69,8 +106,10 @@ function syncSettings() {
     try {
       settings = JSON.parse(existingRaw);
     } catch {
-      // Malformed settings.json is the user's to fix. Overwriting it here
-      // would destroy their theme, model, and effort settings.
+      /**
+       * A malformed settings.json is the user's to fix. Overwriting
+       * it here would destroy their theme, model, and effort settings.
+       */
       return;
     }
   }

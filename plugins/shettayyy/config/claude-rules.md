@@ -16,6 +16,16 @@ A broken system package manager can break all projects at once.
 - Never add co-author trailers or any messages indicating Claude was involved in commits. All commits should reflect only the user's authorship in git history.
 - Do not include `Co-authored-by`, `Co-committed-by`, or similar trailers in commit messages on the user's behalf.
 
+## Code Comments
+
+Use the language's own documentation comment convention. Never stack `//` lines to form a paragraph.
+
+- File headers, functions, classes, and exported symbols get a block comment in the language's doc format: JSDoc (`/** ... */`) for JavaScript and TypeScript, docstrings for Python, `///` for Rust, godoc for Go.
+- Inside a block comment, separate distinct thoughts with a blank ` *` line instead of running them into one paragraph.
+- Break lines at clause boundaries, not mid-phrase, and keep the wrap width consistent within a file.
+- Align related items across lines, such as mapping tables and parameter lists, so they read as columns.
+- Reserve inline `//` for a short note about the single line it sits above.
+
 ## Communication
 
 - Keep replies extremely concise. Focus on the key information. No unnecessary fluff, no long code snippets.
