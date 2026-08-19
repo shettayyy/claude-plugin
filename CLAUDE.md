@@ -4,7 +4,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## What this repo is
 
-A single-plugin Claude Code marketplace that distributes Rahul Shetty's personal config (rules, skills, deny permissions) across machines. On session start, the `shettayyy` plugin's hook syncs versioned files from `plugins/shettayyy/config/` into the machine's `~/.claude/`. There is no compiled application. The only toolchain is ESLint for the hook script.
+A single-plugin Claude Code marketplace that distributes Rahul Shetty's personal config (rules, skills, deny permissions) across machines. On session start, the `shettayyy` plugin's hook syncs versioned files from `plugins/shettayyy/config/` into the machine's `~/.claude/`. There is no compiled application. The only toolchain is Biome, which lints and formats the hook script and the JSON manifests.
 
 ## Structure
 
@@ -20,8 +20,18 @@ This project uses **pnpm**, pinned via `packageManager` in `package.json`. Never
 
 ```bash
 pnpm install
-pnpm run lint
 ```
+
+## Lint and format
+
+Biome handles both. `pnpm run check` is what CI runs, so match it locally before pushing.
+
+```bash
+pnpm run check      # lint + format, read only
+pnpm run check:fix  # lint + format, apply fixes
+```
+
+Formatting is configured in `biome.json` to match the existing style, 2-space indent and single quotes, rather than Biome's tab default.
 
 ## Validate
 
