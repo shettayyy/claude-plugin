@@ -88,14 +88,9 @@
   },
   "overrides": [
     {
-      "includes": [
-        "**/*.mjs",
-        "**/*.js"
-      ],
+      "includes": ["**/*.mjs", "**/*.js"],
       "javascript": {
-        "globals": [
-          "exports"
-        ]
+        "globals": ["exports"]
       }
     }
   ],

@@ -14,9 +14,9 @@
  * the session.
  */
 
-import { readFileSync, writeFileSync, renameSync, mkdirSync } from 'node:fs';
+import { mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
-import { join, dirname } from 'node:path';
+import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const pluginRoot =
