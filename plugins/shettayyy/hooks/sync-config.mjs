@@ -77,22 +77,37 @@ function syncRules() {
 }
 
 /**
- * Adds any missing deny rules to a settings object, in place.
+ * Reconciles deny rules in a settings object, in place.
+ *
+ * Adds every rule this plugin requires and drops only those it
+ * explicitly marks obsolete. A rule the user added themselves is
+ * never removed, since it appears in neither list.
  *
  * @param {Record<string, unknown>} settings Parsed settings.json.
  * @param {string[]} wanted Deny rules this plugin requires.
+ * @param {string[]} obsolete Deny rules this plugin has retired.
  * @returns {string | null} A summary of what changed, or null.
  */
-function applyDenyRules(settings, wanted) {
-  if (!Array.isArray(wanted) || wanted.length === 0) return null;
+function applyDenyRules(settings, wanted, obsolete) {
+  const required = Array.isArray(wanted) ? wanted : [];
+  const retired = Array.isArray(obsolete) ? obsolete : [];
+  if (required.length === 0 && retired.length === 0) return null;
 
   const current = settings.permissions?.deny;
   const deny = Array.isArray(current) ? current : [];
-  const missing = wanted.filter((rule) => !deny.includes(rule));
-  if (missing.length === 0) return null;
 
-  settings.permissions = { ...settings.permissions, deny: [...deny, ...missing] };
-  return `+${missing.length} deny`;
+  const kept = deny.filter((rule) => !retired.includes(rule));
+  const removedCount = deny.length - kept.length;
+
+  const missing = required.filter((rule) => !kept.includes(rule));
+  if (missing.length === 0 && removedCount === 0) return null;
+
+  settings.permissions = { ...settings.permissions, deny: [...kept, ...missing] };
+
+  const parts = [];
+  if (missing.length > 0) parts.push(`+${missing.length}`);
+  if (removedCount > 0) parts.push(`-${removedCount}`);
+  return `deny ${parts.join('/')}`;
 }
 
 /**
@@ -165,7 +180,7 @@ function syncSettings() {
   }
 
   const summaries = [
-    applyDenyRules(settings, managed?.permissions?.deny),
+    applyDenyRules(settings, managed?.permissions?.deny, managed?.obsoleteDeny),
     applyMarketplaces(settings, managed?.extraKnownMarketplaces),
   ].filter(Boolean);
 
