@@ -37,5 +37,9 @@ jobs:
         with:
           runtime: node@22
           install: false
-      - run: pnpm dlx @anthropic-ai/claude-code plugin validate ./plugins/shettayyy
-      - run: pnpm dlx @anthropic-ai/claude-code plugin validate .
+      - name: Validate plugin and marketplace manifests
+        env:
+          CLAUDE_CODE_VERSION: 2.1.235
+        run: |
+          pnpm dlx "@anthropic-ai/claude-code@$CLAUDE_CODE_VERSION" plugin validate ./plugins/shettayyy
+          pnpm dlx "@anthropic-ai/claude-code@$CLAUDE_CODE_VERSION" plugin validate .
