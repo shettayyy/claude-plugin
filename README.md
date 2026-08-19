@@ -49,19 +49,68 @@ Restart Claude Code. The version bump is what drives updates: `claude plugin upd
 
 Tagging is optional. `claude plugin tag ./plugins/shettayyy --push` creates a `shettayyy--v<version>` tag, but tags are only read for dependency version constraints, which this plugin has none of.
 
-## Local development
+## Development setup
+
+### Prerequisites
+
+| Tool | Version | Notes |
+| --- | --- | --- |
+| Node.js | >= 22 | matches the `engines` field and CI |
+| pnpm | >= 11 | pinned by `packageManager` in `package.json` |
+| Claude Code | any recent | provides the `claude` CLI used by `pnpm run validate` |
+
+### Get started
+
+```bash
+git clone git@github.com:shettayyy/claude-plugin.git
+cd claude-plugin
+pnpm install
+```
+
+This project uses pnpm only. A `preinstall` guard fails the install if you reach for `npm` or `yarn`, so there is no way to end up with a stray `package-lock.json`.
+
+### Scripts
+
+| Script | Does |
+| --- | --- |
+| `pnpm run check` | Biome lint plus format, read only. This is what CI runs. |
+| `pnpm run check:fix` | Same, applying every safe fix |
+| `pnpm run lint` | Lint only |
+| `pnpm run format` | Format only, writes in place |
+| `pnpm run validate` | Runs `claude plugin validate` on the plugin and the marketplace |
+
+Formatting is pinned in `biome.json` to 2-space indent and single quotes, deliberately overriding Biome's tab default so the config files stay diff-stable.
+
+### Run your changes without installing
 
 ```bash
 claude --plugin-dir ./plugins/shettayyy
 ```
 
-This loads the working copy without installing it, and takes precedence over the installed plugin of the same name for that session. Run `/reload-plugins` to pick up edits without restarting.
+The working copy takes precedence over the installed plugin of the same name for that session, so you can test edits without uninstalling anything. Run `/reload-plugins` to pick up further edits without restarting.
 
-Validate before pushing:
+### Test the sync hook in isolation
+
+The hook writes to `~/.claude/` by default, which you do not want while developing. Both paths are overridable, so point it at a throwaway directory:
 
 ```bash
-claude plugin validate ./plugins/shettayyy && claude plugin validate .
+mkdir -p /tmp/fake-claude
+CLAUDE_CONFIG_DIR=/tmp/fake-claude \
+CLAUDE_PLUGIN_ROOT="$PWD/plugins/shettayyy" \
+  node plugins/shettayyy/hooks/sync-config.mjs
 ```
+
+It prints a line naming what it wrote, and prints nothing when everything already matches. Run it twice to confirm it is idempotent.
+
+### Before you push
+
+```bash
+pnpm run check && pnpm run validate
+```
+
+Commits follow [Conventional Commits](https://www.conventionalcommits.org/) and should be atomic: one logical change each, with a diff limited to what the message describes.
+
+**If you changed anything under `plugins/shettayyy/config/` or `skills/`, bump `version` in `plugins/shettayyy/.claude-plugin/plugin.json` in the same commit.** Nothing enforces this yet, and without the bump `claude plugin update` sees no change, so the edit never reaches any other machine.
 
 ## Layout
 
