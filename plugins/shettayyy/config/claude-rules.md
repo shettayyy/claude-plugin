@@ -15,6 +15,9 @@ A broken system package manager can break all projects at once.
 
 - Never add co-author trailers or any messages indicating Claude was involved in commits. All commits should reflect only the user's authorship in git history.
 - Do not include `Co-authored-by`, `Co-committed-by`, or similar trailers in commit messages on the user's behalf.
+- Prefer atomic commits over one large commit. Each commit holds exactly one logical change and makes sense on its own.
+- Split unrelated work into separate commits even when it happened in the same session. A refactor, a feature, and a docs update are three commits, not one.
+- Keep a commit's diff limited to what its message describes. If the message needs the word "and", it is probably two commits.
 
 ## Code Comments
 
