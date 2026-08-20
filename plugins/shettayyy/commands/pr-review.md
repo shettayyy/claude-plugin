@@ -1,6 +1,6 @@
 ---
 description: Run /code-review on a PR, then walk the findings one at a time as a table you drive.
-argument-hint: [level] [PR number | branch | path]
+argument-hint: '[level] [PR number | branch | path]'
 disable-model-invocation: true
 ---
 
