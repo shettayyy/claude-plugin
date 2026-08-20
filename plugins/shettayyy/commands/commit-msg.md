@@ -1,5 +1,4 @@
 ---
-name: commit-msg
 description: Generate a single commit message for the uncommitted changes in this repo. Follows the project's commitlint config when one exists, otherwise Conventional Commits.
 disable-model-invocation: true
 ---
