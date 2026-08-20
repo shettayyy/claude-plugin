@@ -13,6 +13,7 @@ A single-plugin Claude Code marketplace that distributes Rahul Shetty's personal
 - `plugins/shettayyy/config/` — the payload that gets synced: `claude-rules.md` → `~/.claude/CLAUDE.md`, and `managed-settings.json` deny rules plus `extraKnownMarketplaces` entries → `~/.claude/settings.json`
 - `plugins/shettayyy/hooks/` — `hooks.json` (SessionStart trigger) and `sync-config.mjs` (the sync logic; ES modules)
 - `plugins/shettayyy/skills/` — plugin skills (e.g. `commit-msg`)
+- `plugins/shettayyy/commands/` — plugin slash commands (e.g. `pr-review`)
 
 ## Package manager
 

@@ -16,6 +16,7 @@ Restart Claude Code. On the next session start the plugin writes its versioned c
 | Repo path | Lands at | How |
 | --- | --- | --- |
 | `plugins/shettayyy/skills/` | `/shettayyy:<name>` | loaded by the plugin |
+| `plugins/shettayyy/commands/` | `/shettayyy:<name>` | loaded by the plugin |
 | `plugins/shettayyy/agents/` | `@shettayyy:<name>` | loaded by the plugin |
 | `plugins/shettayyy/config/claude-rules.md` | `~/.claude/CLAUDE.md` | full overwrite |
 | `plugins/shettayyy/config/managed-settings.json` | `~/.claude/settings.json` | `permissions.deny` merged in |
@@ -115,7 +116,7 @@ pnpm run check && pnpm run test && pnpm run validate
 
 Commits follow [Conventional Commits](https://www.conventionalcommits.org/) and should be atomic: one logical change each, with a diff limited to what the message describes.
 
-**If you changed anything under `plugins/shettayyy/config/`, `skills/`, or `agents/`, bump `version` in `plugins/shettayyy/.claude-plugin/plugin.json` in the same commit.** Without the bump nothing propagates, since both the manual and automatic update paths compare versions. The `version-bump` CI job enforces this and fails the build if you forget, so check it locally first:
+**If you changed anything under `plugins/shettayyy/`, bump `version` in `plugins/shettayyy/.claude-plugin/plugin.json` in the same commit.** Without the bump nothing propagates, since both the manual and automatic update paths compare versions. The `version-bump` CI job enforces this and fails the build if you forget, so check it locally first:
 
 ```bash
 pnpm run check:version
@@ -127,7 +128,8 @@ pnpm run check:version
 .claude-plugin/marketplace.json      marketplace manifest, name "claude-plugin"
 plugins/shettayyy/
   .claude-plugin/plugin.json         plugin manifest, holds the version
-  skills/<name>/SKILL.md             skills and slash commands
+  skills/<name>/SKILL.md             skills, also usable as slash commands
+  commands/<name>.md                 slash commands, never model-invoked
   agents/                            subagents
   hooks/hooks.json                   registers the SessionStart hook
   hooks/sync-config.mjs              applies config/ to the global config
