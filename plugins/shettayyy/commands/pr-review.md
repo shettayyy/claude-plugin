@@ -34,7 +34,7 @@ No summary, no preamble, no details, no "let me know if". If the review found no
 
 ## Step 3: one issue per turn
 
-On `next`, take the next row in table order. Only that row. Keep the whole thing under roughly 200 words.
+On `next`, take the next row in table order. Only that row. Keep the prose under roughly 200 words. Code blocks do not count toward that.
 
 Write it in plain language. No jargon. If a technical term is unavoidable, explain it in half a sentence. Use this shape and drop any section that does not apply:
 
@@ -43,8 +43,8 @@ Write it in plain language. No jargon. If a technical term is unavoidable, expla
 - **Where**: `path/to/file.ts:120`, as a clickable link. If the finding is about the pull request conversation rather than the code, link the GitHub thread instead.
 - **What happens**: two or three sentences on the actual effect, not the mechanism.
 - **Steps to reproduce**: numbered, bugs only, with real inputs rather than placeholders. If it cannot be reproduced from the code alone, say exactly that instead of inventing steps.
-- **Fix**: the smallest change that solves it. Use a code block only when it is shorter than the words would be, and keep it under ten lines.
-- **Comment to post**: a fenced plain-text block, one to three sentences, addressed to the author, ready to paste as an inline comment on that line. No emojis, no praise sandwich, no mention of AI or of this review.
+- **Fix**: one or two sentences on what to change and why it solves the problem. Then show the smallest change as a `diff` code block, GitHub style, with `-` for removed lines and `+` for added lines. Put the file and line above the block in brackets, for example `[path/to/file.ts:120]`. Keep a few unchanged lines around the change for context, and use one block per file when the fix touches more than one.
+- **Comment to post**: a fenced plain-text block, one to three sentences, addressed to the author, ready to paste as an inline comment on that line. Start it with the file and line in brackets, for example `[path/to/file.ts:120]`, so the user knows where to paste it. No emojis, no praise sandwich, no mention of AI or of this review.
 
 Never roll into the following issue on your own. No need to ask whether you need to move to the next issue. Wait for users instructions. They can discuss the current issue or say next to move to the next one.
 
