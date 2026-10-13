@@ -52,7 +52,7 @@ claude plugin update shettayyy@claude-plugin
 
 Either way, the version bump is what drives updates: both paths compare the installed version against the one in `plugin.json`. Push without bumping and nothing propagates, which is what the `version-bump` CI job exists to catch.
 
-Tagging is optional. `claude plugin tag ./plugins/shettayyy --push` creates a `shettayyy--v<version>` tag, but tags are only read for dependency version constraints, which this plugin has none of.
+Tag every release. After pushing the bump, run `claude plugin tag ./plugins/shettayyy --push` to create and push a `shettayyy--v<version>` tag on that commit.
 
 ## Development setup
 

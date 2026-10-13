@@ -44,6 +44,7 @@ claude plugin validate ./plugins/shettayyy && claude plugin validate .
 - Commit messages follow Conventional Commits (`feat:`, `fix:`, `refactor:`, `docs:`).
 - Never add co-author or "Claude" trailers to commits.
 - When bumping the plugin, edit the `version` in `plugins/shettayyy/.claude-plugin/plugin.json`.
+- Always tag every release. After the bump commit is pushed, run `claude plugin tag ./plugins/shettayyy --push` to create and push the `shettayyy--v<version>` tag on that commit.
 
 ## sync-config.mjs gotchas
 
