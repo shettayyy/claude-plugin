@@ -34,14 +34,19 @@ No summary, no preamble, no details, no "let me know if". If the review found no
 
 ## Step 3: one issue per turn
 
-On `next`, take the next row in table order. Only that row. Keep the prose under roughly 200 words. Code blocks do not count toward that.
+On `next`, take the next row in table order. Only that row. Keep the prose under roughly 300 words. Code blocks do not count toward that.
 
-Write it in plain language. No jargon. If a technical term is unavoidable, explain it in half a sentence. Use this shape and drop any section that does not apply:
+Write it in plain language. No jargon outside the "in the code" parts. If a technical term is unavoidable elsewhere, explain it in half a sentence. Use this shape and drop any section that does not apply:
 
 **N. Title** (Severity)
 
 - **Where**: `path/to/file.ts:120`, as a clickable link. If the finding is about the pull request conversation rather than the code, link the GitHub thread instead.
-- **What happens**: two or three sentences on the actual effect, not the mechanism.
+- **What happens**: split into these parts.
+  - **Today, in plain terms**: one or two sentences someone non-technical could follow, describing what goes wrong for the user or the system.
+  - **Today, in the code**: how that maps to the code path, naming the functions, values, or conditions involved.
+  - **Evidence**: quote the exact lines that prove it, each as a short code block headed by its clickable `path/to/file.ts:120` link. Copy them from the file as it reads now, never from memory or paraphrase. If a claim cannot be backed by a quote, say it is unverified.
+  - **Expected, in plain terms**: one or two sentences someone non-technical could follow, describing what should happen instead.
+  - **Expected, in the code**: how the code path should behave to get there.
 - **Steps to reproduce**: numbered, bugs only, with real inputs rather than placeholders. If it cannot be reproduced from the code alone, say exactly that instead of inventing steps.
 - **Fix**: one or two sentences on what to change and why it solves the problem. Then show the smallest change as a `diff` code block, GitHub style, with `-` for removed lines and `+` for added lines. Put the file and line above the block in brackets, for example `[path/to/file.ts:120]`. Keep a few unchanged lines around the change for context, and use one block per file when the fix touches more than one.
 - **Comment to post**: a fenced plain-text block, one to three sentences, addressed to the author, ready to paste as an inline comment on that line. Start it with the file and line in brackets, for example `[path/to/file.ts:120]`, so the user knows where to paste it. No emojis, no praise sandwich, no mention of AI or of this review.
