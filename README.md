@@ -16,7 +16,6 @@ Restart Claude Code. On the next session start the plugin writes its versioned c
 | Repo path | Lands at | How |
 | --- | --- | --- |
 | `plugins/shettayyy/skills/` | `/shettayyy:<name>` | loaded by the plugin |
-| `plugins/shettayyy/commands/` | `/shettayyy:<name>` | loaded by the plugin |
 | `plugins/shettayyy/agents/` | `@shettayyy:<name>` | loaded by the plugin |
 | `plugins/shettayyy/config/claude-rules.md` | `~/.claude/CLAUDE.md` | full overwrite |
 | `plugins/shettayyy/config/managed-settings.json` | `~/.claude/settings.json` | `permissions.deny` merged in |
@@ -129,7 +128,6 @@ pnpm run check:version
 plugins/shettayyy/
   .claude-plugin/plugin.json         plugin manifest, holds the version
   skills/<name>/SKILL.md             skills, also usable as slash commands
-  commands/<name>.md                 slash commands, never model-invoked
   agents/                            subagents
   hooks/hooks.json                   registers the SessionStart hook
   hooks/sync-config.mjs              applies config/ to the global config

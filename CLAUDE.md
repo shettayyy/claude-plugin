@@ -12,7 +12,7 @@ A single-plugin Claude Code marketplace that distributes Rahul Shetty's personal
 - `plugins/shettayyy/.claude-plugin/plugin.json` — plugin manifest (holds the version)
 - `plugins/shettayyy/config/` — the payload that gets synced: `claude-rules.md` → `~/.claude/CLAUDE.md`, and `managed-settings.json` deny rules plus `extraKnownMarketplaces` entries → `~/.claude/settings.json`
 - `plugins/shettayyy/hooks/` — `hooks.json` (SessionStart trigger) and `sync-config.mjs` (the sync logic; ES modules)
-- `plugins/shettayyy/commands/` — plugin slash commands (e.g. `commit-msg`, `pr-review`)
+- `plugins/shettayyy/skills/` — plugin skills, invoked as `/shettayyy:<name>` (e.g. `commit-msg`, `pr-review`)
 
 ## Package manager
 
@@ -54,7 +54,7 @@ Every line loads into every session in every project. Keep it lean.
 - Aim for net-zero edits. Fold a new rule into an existing line, or trim a duplicate in the same change.
 - Drop rules Claude already follows by default.
 - Rules that can be checked mechanically belong in a hook, not here. For example, a PreToolUse hook on `git commit` could block co-author trailers.
-- Rules for a single task belong in that command (e.g. `commands/pr-review.md`), not here.
+- Rules for a single task belong in that skill (e.g. `skills/pr-review/SKILL.md`), not here.
 - Check each new rule against existing ones for conflicts. An ignored rule is usually vague or contradicted, not drowned out by length.
 - The file must follow its own writing rules.
 
