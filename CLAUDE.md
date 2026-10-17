@@ -46,6 +46,18 @@ claude plugin validate ./plugins/shettayyy && claude plugin validate .
 - When bumping the plugin, edit the `version` in `plugins/shettayyy/.claude-plugin/plugin.json`.
 - Always tag every release. After the bump commit is pushed, run `claude plugin tag ./plugins/shettayyy --push` to create and push the `shettayyy--v<version>` tag on that commit.
 
+## Editing claude-rules.md
+
+Every line loads into every session in every project. Keep it lean.
+
+- Keep it under about 100 lines. Past that, adding a rule means removing one.
+- Aim for net-zero edits. Fold a new rule into an existing line, or trim a duplicate in the same change.
+- Drop rules Claude already follows by default.
+- Rules that can be checked mechanically belong in a hook, not here. For example, a PreToolUse hook on `git commit` could block co-author trailers.
+- Rules for a single task belong in that command (e.g. `commands/pr-review.md`), not here.
+- Check each new rule against existing ones for conflicts. An ignored rule is usually vague or contradicted, not drowned out by length.
+- The file must follow its own writing rules.
+
 ## sync-config.mjs gotchas
 
 - **Additive merge only**: it adds missing deny rules and shallow-merges declared `extraKnownMarketplaces` entries. It never removes existing settings, never touches marketplaces it does not declare, and never touches `theme`, `model`, `effortLevel`, or `enabledPlugins`.
