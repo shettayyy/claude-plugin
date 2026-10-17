@@ -143,7 +143,7 @@ describe('rules sync', () => {
     const { stdout, status } = runHook(sandbox);
 
     assert.equal(status, 0);
-    assert.match(stdout, /CLAUDE\.md/);
+    assert.match(JSON.parse(stdout).systemMessage, /CLAUDE\.md/);
     assert.equal(readFileSync(join(sandbox.configDir, 'CLAUDE.md'), 'utf8'), '# Rules\n');
   });
 

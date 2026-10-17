@@ -198,14 +198,28 @@ function syncSettings() {
   changed.push(`settings.json (${summaries.join('; ')})`);
 }
 
+/**
+ * Shows a message to the user without adding it to Claude's context.
+ *
+ * Plain stdout from a SessionStart hook becomes Claude's context,
+ * and Claude Code hides stderr when the hook exits 0.
+ * A `systemMessage` is shown to the user only.
+ *
+ * @param {string} message Text to show.
+ * @returns {void}
+ */
+function notify(message) {
+  process.stdout.write(`${JSON.stringify({ systemMessage: message })}\n`);
+}
+
 try {
   syncRules();
   syncSettings();
   if (changed.length > 0) {
-    console.log(`[shettayyy] synced global config: ${changed.join(', ')}`);
+    notify(`[shettayyy] synced global config: ${changed.join(', ')}`);
   }
 } catch (error) {
-  console.error(`[shettayyy] config sync skipped: ${error.message}`);
+  notify(`[shettayyy] config sync skipped: ${error.message}`);
 }
 
 process.exit(0);
