@@ -16,7 +16,7 @@ Restart Claude Code. On the next session start the plugin writes its versioned c
 | Repo path | Lands at | How |
 | --- | --- | --- |
 | `plugins/shettayyy/skills/` | `/shettayyy:<name>` | loaded by the plugin |
-| `plugins/shettayyy/agents/` | `@shettayyy:<name>` | loaded by the plugin |
+| `plugins/shettayyy/agents/` | `@shettayyy:<name>` | loaded by the plugin (none ship yet) |
 | `plugins/shettayyy/config/claude-rules.md` | `~/.claude/CLAUDE.md` | full overwrite |
 | `plugins/shettayyy/config/managed-settings.json` | `~/.claude/settings.json` | `permissions.deny` merged in |
 
@@ -40,7 +40,7 @@ git add -A && git commit -m "feat: ..." && git push
 
 On the other laptop, either wait or pull it immediately.
 
-Auto-update is enabled for this marketplace, and the sync hook turns it on for every machine, so a pushed version arrives on its own. It is not instant: Claude Code checks after a session starts with a random delay of up to ten minutes, the running session keeps the version it launched with, and the new version then needs `/reload-plugins` or the next launch. Expect it within a couple of sessions rather than immediately.
+Auto-update is enabled for this marketplace, and the sync hook turns it on for every machine, so a pushed version arrives on its own. It is not instant. In an interactive session, Claude Code waits a random delay of up to ten minutes after your first message, then checks for updates. The running session keeps the version it launched with, and the new version then needs `/reload-plugins` or the next launch. Expect it within a couple of sessions rather than immediately.
 
 To pull it right now instead:
 
@@ -105,7 +105,7 @@ CLAUDE_PLUGIN_ROOT="$PWD/plugins/shettayyy" \
   node plugins/shettayyy/hooks/sync-config.mjs
 ```
 
-It prints a line naming what it wrote, and prints nothing when everything already matches. Run it twice to confirm it is idempotent.
+It prints a `systemMessage` JSON line naming what it wrote, and prints nothing when everything already matches. Run it twice to confirm it is idempotent.
 
 ### Before you push
 
@@ -128,7 +128,7 @@ pnpm run check:version
 plugins/shettayyy/
   .claude-plugin/plugin.json         plugin manifest, holds the version
   skills/<name>/SKILL.md             skills, also usable as slash commands
-  agents/                            subagents
+  agents/                            subagents (empty for now)
   hooks/hooks.json                   registers the SessionStart hook
   hooks/sync-config.mjs              applies config/ to the global config
   config/claude-rules.md             global rules
