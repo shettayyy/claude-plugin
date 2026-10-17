@@ -13,7 +13,7 @@
     "preinstall": "npx only-allow pnpm",
     "lint": "biome lint .",
     "lint:fix": "biome lint . --write",
-    "validate": "claude plugin validate ./plugins/shettayyy && claude plugin validate .",
+    "validate": "claude plugin validate --strict ./plugins/shettayyy && claude plugin validate --strict .",
     "format": "biome format . --write",
     "check": "biome check .",
     "check:fix": "biome check . --write",
