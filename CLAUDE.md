@@ -63,7 +63,7 @@ Every line loads into every session in every project. Keep it lean.
 
 ## sync-config.mjs gotchas
 
-- **Additive merge only**: it adds missing deny rules and shallow-merges declared `extraKnownMarketplaces` entries. It never removes existing settings, never touches marketplaces it does not declare, and never touches `theme`, `model`, `effortLevel`, or `enabledPlugins`.
+- **Mostly additive merge**: it adds missing deny rules and shallow-merges declared `extraKnownMarketplaces` entries. The one removal is deny rules listed in `obsoleteDeny` in `managed-settings.json`. Those are removed from every machine, even if a user added the same rule by hand. It never touches marketplaces it does not declare, or `theme`, `model`, `effortLevel`, and `enabledPlugins`.
 - **Next-session timing**: changes to synced rules take effect on the *next* session, not the current one.
 - **Atomic writes**: writes to a temp file then renames, to survive interruption.
 - **Malformed `~/.claude/settings.json` is skipped silently** so local machine prefs are never destroyed.
