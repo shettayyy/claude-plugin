@@ -13,8 +13,8 @@
  */
 
 import assert from 'node:assert/strict';
-import { execFileSync } from 'node:child_process';
-import { mkdirSync, mkdtempSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { execFileSync, spawn } from 'node:child_process';
+import { mkdirSync, mkdtempSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { after, beforeEach, describe, it } from 'node:test';
@@ -408,7 +408,39 @@ describe('failure handling', () => {
 
     runHook(sandbox);
 
-    assert.throws(() => readFileSync(join(sandbox.configDir, 'settings.json.tools-sync.tmp')));
+    assert.deepEqual(
+      readdirSync(sandbox.configDir).filter((name) => name.endsWith('.tmp')),
+      [],
+    );
+  });
+
+  it('keeps settings.json valid when several sessions start at once', async () => {
+    writeManaged(sandbox, { permissions: { deny: ['A', 'B'] } });
+    writeSettings(sandbox, { theme: 'dark' });
+
+    const runs = Array.from(
+      { length: 8 },
+      () =>
+        new Promise((resolve) => {
+          const child = spawn('node', [HOOK], {
+            env: {
+              ...process.env,
+              CLAUDE_PLUGIN_ROOT: sandbox.pluginRoot,
+              CLAUDE_CONFIG_DIR: sandbox.configDir,
+            },
+            stdio: 'ignore',
+          });
+          child.on('close', resolve);
+        }),
+    );
+    const statuses = await Promise.all(runs);
+
+    assert.deepEqual(statuses, Array(8).fill(0));
+    assert.deepEqual(readSettings(sandbox), { theme: 'dark', permissions: { deny: ['A', 'B'] } });
+    assert.deepEqual(
+      readdirSync(sandbox.configDir).filter((name) => name.endsWith('.tmp')),
+      [],
+    );
   });
 });
 

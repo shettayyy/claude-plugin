@@ -14,7 +14,8 @@
  * the session.
  */
 
-import { mkdirSync, readFileSync, renameSync, writeFileSync } from 'node:fs';
+import { randomUUID } from 'node:crypto';
+import { mkdirSync, readFileSync, renameSync, rmSync, writeFileSync } from 'node:fs';
 import { homedir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -46,15 +47,24 @@ function read(path) {
  * An interrupted run must not leave a half-written settings.json
  * behind, so the file only ever appears complete.
  *
+ * The temp name is unique per run. Two sessions starting together
+ * would otherwise share one temp file, and one could rename the
+ * other's half-written file into place.
+ *
  * @param {string} path Destination path.
  * @param {string} contents Full file contents to write.
  * @returns {void}
  */
 function writeAtomic(path, contents) {
   mkdirSync(dirname(path), { recursive: true });
-  const tmp = `${path}.tools-sync.tmp`;
-  writeFileSync(tmp, contents, 'utf8');
-  renameSync(tmp, path);
+  const tmp = `${path}.${process.pid}.${randomUUID()}.tmp`;
+  try {
+    writeFileSync(tmp, contents, 'utf8');
+    renameSync(tmp, path);
+  } catch (error) {
+    rmSync(tmp, { force: true });
+    throw error;
+  }
 }
 
 /**
