@@ -16,14 +16,13 @@ Restart Claude Code. On the next session start the plugin writes its versioned c
 | Repo path | Lands at | How |
 | --- | --- | --- |
 | `plugins/shettayyy/skills/` | `/shettayyy:<name>` | loaded by the plugin |
-| `plugins/shettayyy/commands/` | `/shettayyy:<name>` | loaded by the plugin |
-| `plugins/shettayyy/agents/` | `@shettayyy:<name>` | loaded by the plugin |
+| `plugins/shettayyy/agents/` | `@shettayyy:<name>` | loaded by the plugin (none ship yet) |
 | `plugins/shettayyy/config/claude-rules.md` | `~/.claude/CLAUDE.md` | full overwrite |
 | `plugins/shettayyy/config/managed-settings.json` | `~/.claude/settings.json` | `permissions.deny` merged in |
 
 `~/.claude/CLAUDE.md` is fully owned by this repo. Anything written to it directly on a machine, including memory saved with `#`, is replaced the next time the rules change upstream. Edit `config/claude-rules.md` instead.
 
-`settings.json` is only ever added to. `theme`, `model`, `effortLevel`, and `enabledPlugins` stay local to each machine and are never touched. If the file is not valid JSON the sync backs off rather than overwriting it.
+`settings.json` is only added to, with one exception. Deny rules listed in `obsoleteDeny` in `managed-settings.json` are removed, which is how a retired rule leaves every machine. `theme`, `model`, `effortLevel`, and `enabledPlugins` stay local to each machine and are never touched. If the file is not valid JSON the sync backs off rather than overwriting it.
 
 A plugin can ship a root `settings.json`, but only the `agent` and `subagentStatusLine` keys are read from it, so permission rules have to go through the hook.
 
@@ -33,15 +32,14 @@ A plugin can ship a root `settings.json`, but only the `agent` and `subagentStat
 
 ## Shipping a change
 
-Bump `version` in `plugins/shettayyy/.claude-plugin/plugin.json`, then:
-
-```bash
-git add -A && git commit -m "feat: ..." && git push
-```
+1. Branch from `main` and commit your work.
+2. If anything under `plugins/shettayyy/` changed, bump `version` once in the PR, in both `plugins/shettayyy/.claude-plugin/plugin.json` and `package.json`.
+3. Push and open a PR with a Conventional Commit title. CI must pass before it can merge.
+4. Squash-merge. CI on `main` then tags the release as `shettayyy--v<version>`.
 
 On the other laptop, either wait or pull it immediately.
 
-Auto-update is enabled for this marketplace, and the sync hook turns it on for every machine, so a pushed version arrives on its own. It is not instant: Claude Code checks after a session starts with a random delay of up to ten minutes, the running session keeps the version it launched with, and the new version then needs `/reload-plugins` or the next launch. Expect it within a couple of sessions rather than immediately.
+Auto-update is enabled for this marketplace, and the sync hook turns it on for every machine, so a pushed version arrives on its own. It is not instant. In an interactive session, Claude Code waits a random delay of up to ten minutes after your first message, then checks for updates. The running session keeps the version it launched with, and the new version then needs `/reload-plugins` or the next launch. Expect it within a couple of sessions rather than immediately.
 
 To pull it right now instead:
 
@@ -52,7 +50,7 @@ claude plugin update shettayyy@claude-plugin
 
 Either way, the version bump is what drives updates: both paths compare the installed version against the one in `plugin.json`. Push without bumping and nothing propagates, which is what the `version-bump` CI job exists to catch.
 
-Tag every release. After pushing the bump, run `claude plugin tag ./plugins/shettayyy --push` to create and push a `shettayyy--v<version>` tag on that commit.
+Releases are tagged automatically. The `release` job in `validate.yml` creates the `shettayyy--v<version>` tag when a new version lands on `main`. Do not tag by hand.
 
 ## Development setup
 
@@ -62,7 +60,7 @@ Tag every release. After pushing the bump, run `claude plugin tag ./plugins/shet
 | --- | --- | --- |
 | Node.js | >= 22 | matches the `engines` field and CI |
 | pnpm | >= 11 | pinned by `packageManager` in `package.json` |
-| Claude Code | any recent | provides the `claude` CLI used by `pnpm run validate` |
+| Claude Code | installed by `pnpm install` | pinned in `devDependencies` and used by `pnpm run validate`. Dependabot keeps it current. |
 
 ### Get started
 
@@ -83,7 +81,7 @@ This project uses pnpm only. A `preinstall` guard fails the install if you reach
 | `pnpm run lint` | Lint only |
 | `pnpm run format` | Format only, writes in place |
 | `pnpm run validate` | Runs `claude plugin validate` on the plugin and the marketplace |
-| `pnpm run test` | Runs the sync-hook tests with `node --test`. CI runs this too. |
+| `pnpm run test` | Runs the sync-hook and version-check tests with `node --test`. CI runs this too. |
 
 Formatting is pinned in `biome.json` to 2-space indent and single quotes, deliberately overriding Biome's tab default so the config files stay diff-stable. JSON uses `expand: "always"` so arrays stay one-item-per-line instead of collapsing onto a single line whenever they happen to fit.
 
@@ -106,7 +104,7 @@ CLAUDE_PLUGIN_ROOT="$PWD/plugins/shettayyy" \
   node plugins/shettayyy/hooks/sync-config.mjs
 ```
 
-It prints a line naming what it wrote, and prints nothing when everything already matches. Run it twice to confirm it is idempotent.
+It prints a `systemMessage` JSON line naming what it wrote, and prints nothing when everything already matches. Run it twice to confirm it is idempotent.
 
 ### Before you push
 
@@ -116,7 +114,7 @@ pnpm run check && pnpm run test && pnpm run validate
 
 Commits follow [Conventional Commits](https://www.conventionalcommits.org/) and should be atomic: one logical change each, with a diff limited to what the message describes.
 
-**If you changed anything under `plugins/shettayyy/`, bump `version` in `plugins/shettayyy/.claude-plugin/plugin.json` in the same commit.** Without the bump nothing propagates, since both the manual and automatic update paths compare versions. The `version-bump` CI job enforces this and fails the build if you forget, so check it locally first:
+**If you changed anything under `plugins/shettayyy/`, bump `version` in `plugins/shettayyy/.claude-plugin/plugin.json` and `package.json` in the same PR.** Without the bump nothing propagates, since both the manual and automatic update paths compare versions. The `version-bump` CI job enforces this and fails the build if you forget, so check it locally first:
 
 ```bash
 pnpm run check:version
@@ -129,8 +127,7 @@ pnpm run check:version
 plugins/shettayyy/
   .claude-plugin/plugin.json         plugin manifest, holds the version
   skills/<name>/SKILL.md             skills, also usable as slash commands
-  commands/<name>.md                 slash commands, never model-invoked
-  agents/                            subagents
+  agents/                            subagents (empty for now)
   hooks/hooks.json                   registers the SessionStart hook
   hooks/sync-config.mjs              applies config/ to the global config
   config/claude-rules.md             global rules

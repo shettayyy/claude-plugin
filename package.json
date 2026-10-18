@@ -1,6 +1,6 @@
 {
   "name": "claude-plugin-marketplace",
-  "version": "0.0.0",
+  "version": "0.11.1",
   "private": true,
   "type": "module",
   "description": "Personal Claude Code plugin marketplace (shettayyy).",
@@ -13,7 +13,7 @@
     "preinstall": "npx only-allow pnpm",
     "lint": "biome lint .",
     "lint:fix": "biome lint . --write",
-    "validate": "claude plugin validate ./plugins/shettayyy && claude plugin validate .",
+    "validate": "claude plugin validate --strict ./plugins/shettayyy && claude plugin validate --strict .",
     "format": "biome format . --write",
     "check": "biome check .",
     "check:fix": "biome check . --write",
@@ -21,6 +21,7 @@
     "test": "node --test scripts/*.test.mjs"
   },
   "devDependencies": {
+    "@anthropic-ai/claude-code": "2.1.302",
     "@biomejs/biome": "^2.5.15"
   }
 }
