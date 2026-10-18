@@ -60,7 +60,7 @@ Releases are tagged automatically. The `release` job in `validate.yml` creates t
 | --- | --- | --- |
 | Node.js | >= 22 | matches the `engines` field and CI |
 | pnpm | >= 11 | pinned by `packageManager` in `package.json` |
-| Claude Code | any recent | provides the `claude` CLI used by `pnpm run validate` |
+| Claude Code | installed by `pnpm install` | pinned in `devDependencies` and used by `pnpm run validate`. Dependabot keeps it current. |
 
 ### Get started
 

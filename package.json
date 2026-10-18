@@ -21,6 +21,7 @@
     "test": "node --test scripts/*.test.mjs"
   },
   "devDependencies": {
+    "@anthropic-ai/claude-code": "2.1.302",
     "@biomejs/biome": "^2.5.15"
   }
 }

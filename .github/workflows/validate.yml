@@ -37,13 +37,11 @@ jobs:
         uses: pnpm/setup@a0881977cd8ea73b1ed212236c99ca10dcc80cf4 # v3.1.1
         with:
           runtime: node@22
+          cache: true
           install: false
+      - run: pnpm install --frozen-lockfile
       - name: Validate plugin and marketplace manifests
-        env:
-          CLAUDE_CODE_VERSION: 2.1.302
-        run: |
-          pnpm dlx "@anthropic-ai/claude-code@$CLAUDE_CODE_VERSION" plugin validate --strict ./plugins/shettayyy
-          pnpm dlx "@anthropic-ai/claude-code@$CLAUDE_CODE_VERSION" plugin validate --strict .
+        run: pnpm run validate
 
   version-bump:
     runs-on: ubuntu-latest

@@ -36,8 +36,10 @@ Formatting is configured in `biome.json` to match the existing style, 2-space in
 ## Validate
 
 ```bash
-claude plugin validate ./plugins/shettayyy && claude plugin validate .
+pnpm run validate
 ```
+
+This runs `claude plugin validate --strict` with the Claude Code version pinned in `devDependencies`, the same one CI uses. `pnpm-workspace.yaml` allows its install script, which pnpm blocks by default.
 
 ## Conventions
 
