@@ -44,8 +44,8 @@ claude plugin validate ./plugins/shettayyy && claude plugin validate .
 - Commit messages follow Conventional Commits (`feat:`, `fix:`, `refactor:`, `docs:`).
 - `main` only accepts squash-merged PRs, and the PR title becomes the commit message. Open one PR per logical change and give it a Conventional Commit title.
 - Never add co-author or "Claude" trailers to commits.
-- When bumping the plugin, edit the `version` in `plugins/shettayyy/.claude-plugin/plugin.json`.
-- Always tag every release. After the bump commit is pushed, run `claude plugin tag ./plugins/shettayyy --push` to create and push the `shettayyy--v<version>` tag on that commit.
+- When bumping the plugin, set `version` in `plugins/shettayyy/.claude-plugin/plugin.json` and `package.json` to the same value. CI fails when they differ.
+- Never tag releases by hand. After a version bump merges into `main`, the `release` job in `validate.yml` creates the `shettayyy--v<version>` tag on that commit.
 
 ## Editing claude-rules.md
 

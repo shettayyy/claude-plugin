@@ -32,11 +32,10 @@ A plugin can ship a root `settings.json`, but only the `agent` and `subagentStat
 
 ## Shipping a change
 
-Bump `version` in `plugins/shettayyy/.claude-plugin/plugin.json`, then:
-
-```bash
-git add -A && git commit -m "feat: ..." && git push
-```
+1. Branch from `main` and commit your work.
+2. If anything under `plugins/shettayyy/` changed, bump `version` once in the PR, in both `plugins/shettayyy/.claude-plugin/plugin.json` and `package.json`.
+3. Push and open a PR with a Conventional Commit title. CI must pass before it can merge.
+4. Squash-merge. CI on `main` then tags the release as `shettayyy--v<version>`.
 
 On the other laptop, either wait or pull it immediately.
 
@@ -51,7 +50,7 @@ claude plugin update shettayyy@claude-plugin
 
 Either way, the version bump is what drives updates: both paths compare the installed version against the one in `plugin.json`. Push without bumping and nothing propagates, which is what the `version-bump` CI job exists to catch.
 
-Tag every release. After pushing the bump, run `claude plugin tag ./plugins/shettayyy --push` to create and push a `shettayyy--v<version>` tag on that commit.
+Releases are tagged automatically. The `release` job in `validate.yml` creates the `shettayyy--v<version>` tag when a new version lands on `main`. Do not tag by hand.
 
 ## Development setup
 
@@ -82,7 +81,7 @@ This project uses pnpm only. A `preinstall` guard fails the install if you reach
 | `pnpm run lint` | Lint only |
 | `pnpm run format` | Format only, writes in place |
 | `pnpm run validate` | Runs `claude plugin validate` on the plugin and the marketplace |
-| `pnpm run test` | Runs the sync-hook tests with `node --test`. CI runs this too. |
+| `pnpm run test` | Runs the sync-hook and version-check tests with `node --test`. CI runs this too. |
 
 Formatting is pinned in `biome.json` to 2-space indent and single quotes, deliberately overriding Biome's tab default so the config files stay diff-stable. JSON uses `expand: "always"` so arrays stay one-item-per-line instead of collapsing onto a single line whenever they happen to fit.
 
@@ -115,7 +114,7 @@ pnpm run check && pnpm run test && pnpm run validate
 
 Commits follow [Conventional Commits](https://www.conventionalcommits.org/) and should be atomic: one logical change each, with a diff limited to what the message describes.
 
-**If you changed anything under `plugins/shettayyy/`, bump `version` in `plugins/shettayyy/.claude-plugin/plugin.json` in the same commit.** Without the bump nothing propagates, since both the manual and automatic update paths compare versions. The `version-bump` CI job enforces this and fails the build if you forget, so check it locally first:
+**If you changed anything under `plugins/shettayyy/`, bump `version` in `plugins/shettayyy/.claude-plugin/plugin.json` and `package.json` in the same PR.** Without the bump nothing propagates, since both the manual and automatic update paths compare versions. The `version-bump` CI job enforces this and fails the build if you forget, so check it locally first:
 
 ```bash
 pnpm run check:version
