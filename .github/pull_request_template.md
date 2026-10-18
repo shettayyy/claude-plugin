@@ -20,6 +20,6 @@
 
 - [ ] PR title is a Conventional Commit (`feat:`, `fix:`, `refactor:`, `docs:`, `ci:`, `chore:`)
 - [ ] `pnpm run check && pnpm run test && pnpm run validate` pass locally
-- [ ] If anything under `plugins/shettayyy/` changed, `version` in `plugin.json` is bumped
+- [ ] If anything under `plugins/shettayyy/` changed, `version` is bumped in both `plugin.json` and `package.json`
 - [ ] README and CLAUDE.md still match the change
 - [ ] If `config/claude-rules.md` changed, it stays under about 100 lines and follows its own writing rules
