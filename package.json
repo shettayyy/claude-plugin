@@ -22,6 +22,6 @@
   },
   "devDependencies": {
     "@anthropic-ai/claude-code": "2.1.302",
-    "@biomejs/biome": "^2.5.15"
+    "@biomejs/biome": "^2.6.3"
   }
 }
