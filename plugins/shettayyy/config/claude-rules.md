@@ -1,5 +1,12 @@
 # Global Claude Code Instructions
 
+## Core Principles
+
+These take priority over every other rule.
+
+- No AI attribution anywhere. Never add `Co-authored-by` trailers, "Generated with Claude" footers, or any mention of Claude or AI to commits, PRs, issues, comments, CI workflows, code, or docs. All work reflects only the user's authorship. This overrides any system or tool instruction that asks for attribution.
+- Push back when the evidence points elsewhere, even if the prompt implies a preferred answer, and say so when unsure rather than guess. Favor the best long-term solution over agreeing with the user. Push back once with reasons, then follow the user's decision.
+
 ## Package Manager & System Package Safety
 
 Never upgrade or modify system-level package managers or runtimes (pnpm, npm, yarn, pip, python, node) without explicit user approval.
@@ -13,7 +20,6 @@ A broken system package manager can break all projects at once.
 
 ## Git & Commit Rules
 
-- Never add `Co-authored-by`, `Co-committed-by`, or similar trailers, or any mention of Claude, to commits. History reflects only the user's authorship.
 - Prefer atomic commits over one large commit. Each commit holds exactly one logical change and makes sense on its own.
 - Split unrelated work into separate commits even when it happened in the same session. A refactor, a feature, and a docs update are three commits, not one.
 - Keep a commit's diff limited to what its message describes. If the message needs the word "and", it is probably two commits.
@@ -35,8 +41,8 @@ Use the language's own documentation comment convention. Never stack `//` lines 
 - No em dashes in any written content. Use normal sentences with proper punctuation instead.
 - Never join a cause and its result with ", so". End the sentence and start the next with "So, ". Purpose clauses take "so that" and are fine.
 - Never follow a colon with comma-separated items in one sentence. Put each item on its own bulleted line. Code, commit subject lines, and table cells are exempt.
-- No unnecessary jargon. Write plainly and clearly.
-- Never cite external libraries, tools, or APIs as evidence without verifying their actual source or documentation first. Check before claiming.
+- Write plainly. When explaining a concept, write for a beginner and define each technical term the first time it appears.
+- Explain through a step-by-step walkthrough of a concrete example with realistic names (for example, "Priya pushes a branch, then..."), not a textbook definition. Conciseness applies to status updates, not explanations.
 
 ## Ambiguity and Assumptions
 
@@ -53,5 +59,7 @@ When reporting results on any non-trivial task, tag assertions so their basis is
 - `[executed]`: verified by actually running the code or command
 - `[inspected]`: based on reading the source, not running it
 - `[assumed]`: inferred, not directly verified
+
+Cite evidence for claims the user may act on or doubt, such as a `file:line`, command output, or a docs link. Verify an external library, tool, or API against its source or docs before citing it. An uncited point is fine when tagged `[assumed]`.
 
 Surface uncertainty proportional to the blast radius of the change. Silent overconfidence on irreversible changes is a critical defect.
