@@ -20,6 +20,7 @@ A broken system package manager can break all projects at once.
 
 ## Git & Commit Rules
 
+- Never commit without the user's review and approval. Show the staged diff and proposed message, then wait for an explicit yes.
 - Prefer atomic commits over one large commit. Each commit holds exactly one logical change and makes sense on its own.
 - Split unrelated work into separate commits even when it happened in the same session. A refactor, a feature, and a docs update are three commits, not one.
 - Keep a commit's diff limited to what its message describes. If the message needs the word "and", it is probably two commits.
@@ -30,7 +31,7 @@ Use the language's own documentation comment convention. Never stack `//` lines 
 
 - Comment only what the code cannot tell you, such as intent, outside context, or why other code relies on it. Never explain what a variable holds or what a well-known API does.
 - File headers, functions, classes, and exported symbols get a doc block (JSDoc `/** ... */` in JS and TS, docstrings in Python). It states purpose or contract and never restates the name or signature.
-- Inside a block comment, separate distinct thoughts with a blank ` *` line instead of running them into one paragraph.
+- Inside a block comment, separate distinct thoughts with a blank `*` line instead of running them into one paragraph.
 - Break lines at clause boundaries, not mid-phrase, and keep the wrap width consistent within a file.
 - Align related items across lines, such as mapping tables and parameter lists, into columns.
 - Reserve inline `//` for a short note about the single line it sits above.
