@@ -5,9 +5,6 @@
       "Read(**/.env.*)",
       "Edit(**/.env)",
       "Edit(**/.env.*)"
-    ],
-    "ask": [
-      "Bash(git commit *)"
     ]
   },
   "obsoleteDeny": [
@@ -15,6 +12,9 @@
     "Write(**/.env.*)",
     "Bash(**/.env)",
     "Bash(**/.env.*)"
+  ],
+  "obsoleteAsk": [
+    "Bash(git commit *)"
   ],
   "extraKnownMarketplaces": {
     "claude-plugin": {
