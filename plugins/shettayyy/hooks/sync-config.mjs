@@ -8,7 +8,7 @@
  * restart.
  *
  * - `config/claude-rules.md`       -> `<config>/CLAUDE.md`      (full overwrite)
- * - `config/managed-settings.json` -> `<config>/settings.json`  (deny rules merged)
+ * - `config/managed-settings.json` -> `<config>/settings.json`  (deny and ask rules merged)
  *
  * Never throws and always exits 0. A broken sync must not break
  * the session.
@@ -87,26 +87,27 @@ function syncRules() {
 }
 
 /**
- * Reconciles deny rules in a settings object, in place.
+ * Reconciles one permission rule list in a settings object, in place.
  *
  * Adds every rule this plugin requires and drops only those it
  * explicitly marks obsolete. A rule the user added themselves is
  * never removed, since it appears in neither list.
  *
  * @param {Record<string, unknown>} settings Parsed settings.json.
- * @param {string[]} wanted Deny rules this plugin requires.
- * @param {string[]} obsolete Deny rules this plugin has retired.
+ * @param {'deny' | 'ask'} kind Which `permissions` list to reconcile.
+ * @param {string[]} wanted Rules this plugin requires.
+ * @param {string[]} obsolete Rules this plugin has retired.
  * @returns {string | null} A summary of what changed, or null.
  */
-function applyDenyRules(settings, wanted, obsolete) {
+function applyPermissionRules(settings, kind, wanted, obsolete) {
   const required = Array.isArray(wanted) ? wanted : [];
   const retired = Array.isArray(obsolete) ? obsolete : [];
   if (required.length === 0 && retired.length === 0) return null;
 
-  const current = settings.permissions?.deny;
-  const deny = Array.isArray(current) ? current : [];
+  const current = settings.permissions?.[kind];
+  const rules = Array.isArray(current) ? current : [];
 
-  const kept = deny.filter((rule) => !retired.includes(rule));
+  const kept = rules.filter((rule) => !retired.includes(rule));
   const missing = required.filter((rule) => !kept.includes(rule));
   const next = [...kept, ...missing];
 
@@ -116,16 +117,16 @@ function applyDenyRules(settings, wanted, obsolete) {
    * which nets out to no change. Reporting that as a change would
    * rewrite settings.json on every session, forever.
    */
-  const unchanged = next.length === deny.length && next.every((rule, i) => rule === deny[i]);
+  const unchanged = next.length === rules.length && next.every((rule, i) => rule === rules[i]);
   if (unchanged) return null;
 
-  settings.permissions = { ...settings.permissions, deny: next };
+  settings.permissions = { ...settings.permissions, [kind]: next };
 
-  const removedCount = deny.length - kept.length;
+  const removedCount = rules.length - kept.length;
   const parts = [];
   if (missing.length > 0) parts.push(`+${missing.length}`);
   if (removedCount > 0) parts.push(`-${removedCount}`);
-  return `deny ${parts.join('/')}`;
+  return `${kind} ${parts.join('/')}`;
 }
 
 /**
@@ -198,7 +199,8 @@ function syncSettings() {
   }
 
   const summaries = [
-    applyDenyRules(settings, managed?.permissions?.deny, managed?.obsoleteDeny),
+    applyPermissionRules(settings, 'deny', managed?.permissions?.deny, managed?.obsoleteDeny),
+    applyPermissionRules(settings, 'ask', managed?.permissions?.ask, managed?.obsoleteAsk),
     applyMarketplaces(settings, managed?.extraKnownMarketplaces),
   ].filter(Boolean);
 

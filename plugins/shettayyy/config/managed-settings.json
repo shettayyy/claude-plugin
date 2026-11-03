@@ -5,6 +5,9 @@
       "Read(**/.env.*)",
       "Edit(**/.env)",
       "Edit(**/.env.*)"
+    ],
+    "ask": [
+      "Bash(git commit *)"
     ]
   },
   "obsoleteDeny": [

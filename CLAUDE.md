@@ -10,7 +10,7 @@ A single-plugin Claude Code marketplace that distributes Rahul Shetty's personal
 
 - `.claude-plugin/marketplace.json` — marketplace manifest
 - `plugins/shettayyy/.claude-plugin/plugin.json` — plugin manifest (holds the version)
-- `plugins/shettayyy/config/` — the payload that gets synced: `claude-rules.md` → `~/.claude/CLAUDE.md`, and `managed-settings.json` deny rules plus `extraKnownMarketplaces` entries → `~/.claude/settings.json`
+- `plugins/shettayyy/config/` — the payload that gets synced: `claude-rules.md` → `~/.claude/CLAUDE.md`, and `managed-settings.json` deny and ask rules plus `extraKnownMarketplaces` entries → `~/.claude/settings.json`
 - `plugins/shettayyy/hooks/` — `hooks.json` (SessionStart trigger) and `sync-config.mjs` (the sync logic; ES modules)
 - `plugins/shettayyy/skills/` — plugin skills, invoked as `/shettayyy:<name>` (e.g. `commit-msg`, `pr-review`)
 
@@ -63,7 +63,7 @@ Every line loads into every session in every project. Keep it lean.
 
 ## sync-config.mjs gotchas
 
-- **Mostly additive merge**: it adds missing deny rules and shallow-merges declared `extraKnownMarketplaces` entries. The one removal is deny rules listed in `obsoleteDeny` in `managed-settings.json`. Those are removed from every machine, even if a user added the same rule by hand. It never touches marketplaces it does not declare, or `theme`, `model`, `effortLevel`, and `enabledPlugins`.
+- **Mostly additive merge**: it adds missing deny and ask rules and shallow-merges declared `extraKnownMarketplaces` entries. The one removal is rules listed in `obsoleteDeny` or `obsoleteAsk` in `managed-settings.json`. Those are removed from every machine, even if a user added the same rule by hand. It never touches marketplaces it does not declare, or `theme`, `model`, `effortLevel`, and `enabledPlugins`.
 - **Next-session timing**: changes to synced rules take effect on the *next* session, not the current one.
 - **Atomic writes**: writes to a temp file then renames, to survive interruption.
 - **Malformed `~/.claude/settings.json` is skipped silently** so local machine prefs are never destroyed.

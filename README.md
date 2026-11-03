@@ -18,11 +18,11 @@ Restart Claude Code. On the next session start the plugin writes its versioned c
 | `plugins/shettayyy/skills/` | `/shettayyy:<name>` | loaded by the plugin |
 | `plugins/shettayyy/agents/` | `@shettayyy:<name>` | loaded by the plugin (none ship yet) |
 | `plugins/shettayyy/config/claude-rules.md` | `~/.claude/CLAUDE.md` | full overwrite |
-| `plugins/shettayyy/config/managed-settings.json` | `~/.claude/settings.json` | `permissions.deny` merged in |
+| `plugins/shettayyy/config/managed-settings.json` | `~/.claude/settings.json` | `permissions.deny` and `permissions.ask` merged in |
 
 `~/.claude/CLAUDE.md` is fully owned by this repo. Anything written to it directly on a machine, including memory saved with `#`, is replaced the next time the rules change upstream. Edit `config/claude-rules.md` instead.
 
-`settings.json` is only added to, with one exception. Deny rules listed in `obsoleteDeny` in `managed-settings.json` are removed, which is how a retired rule leaves every machine. `theme`, `model`, `effortLevel`, and `enabledPlugins` stay local to each machine and are never touched. If the file is not valid JSON the sync backs off rather than overwriting it.
+`settings.json` is only added to, with one exception. Rules listed in `obsoleteDeny` or `obsoleteAsk` in `managed-settings.json` are removed, which is how a retired rule leaves every machine. `theme`, `model`, `effortLevel`, and `enabledPlugins` stay local to each machine and are never touched. If the file is not valid JSON the sync backs off rather than overwriting it.
 
 A plugin can ship a root `settings.json`, but only the `agent` and `subagentStatusLine` keys are read from it, so permission rules have to go through the hook.
 
@@ -131,7 +131,7 @@ plugins/shettayyy/
   hooks/hooks.json                   registers the SessionStart hook
   hooks/sync-config.mjs              applies config/ to the global config
   config/claude-rules.md             global rules
-  config/managed-settings.json       deny rules merged into settings.json
+  config/managed-settings.json       deny and ask rules merged into settings.json
 ```
 
 Component directories live at the plugin root, never inside `.claude-plugin/`, which only holds `plugin.json`. Both directories are auto-discovered, so the manifest declares no component paths.
