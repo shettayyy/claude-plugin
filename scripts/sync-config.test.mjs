@@ -318,6 +318,40 @@ describe('obsolete deny rules', () => {
   });
 });
 
+describe('ask rule merge', () => {
+  /** @type {{pluginRoot: string, configDir: string}} */
+  let sandbox;
+
+  beforeEach(() => {
+    sandbox = makeSandbox();
+  });
+
+  it('merges ask rules without touching the deny list', () => {
+    writeManaged(sandbox, { permissions: { ask: ['Bash(git commit *)'] } });
+    writeSettings(sandbox, { permissions: { ask: ['Bash(rm *)'], deny: ['Read(**/.env)'] } });
+
+    const { stdout } = runHook(sandbox);
+
+    const { permissions } = readSettings(sandbox);
+    assert.deepEqual(permissions.ask, ['Bash(rm *)', 'Bash(git commit *)']);
+    assert.deepEqual(permissions.deny, ['Read(**/.env)']);
+    assert.match(stdout, /ask \+1/);
+  });
+
+  it('retires rules the plugin has marked obsolete', () => {
+    writeManaged(sandbox, {
+      permissions: { ask: ['Bash(git commit *)'] },
+      obsoleteAsk: ['Bash(git push *)'],
+    });
+    writeSettings(sandbox, { permissions: { ask: ['Bash(git push *)'] } });
+
+    const { stdout } = runHook(sandbox);
+
+    assert.deepEqual(readSettings(sandbox).permissions.ask, ['Bash(git commit *)']);
+    assert.match(stdout, /ask \+1\/-1/);
+  });
+});
+
 describe('marketplace merge', () => {
   /** @type {{pluginRoot: string, configDir: string}} */
   let sandbox;
@@ -452,11 +486,16 @@ describe('shipped config', () => {
         'utf8',
       ),
     );
-    const required = managed.permissions?.deny ?? [];
-    const obsolete = managed.obsoleteDeny ?? [];
+    for (const [kind, obsoleteKey] of [
+      ['deny', 'obsoleteDeny'],
+      ['ask', 'obsoleteAsk'],
+    ]) {
+      const required = managed.permissions?.[kind] ?? [];
+      const obsolete = managed[obsoleteKey] ?? [];
 
-    const overlap = obsolete.filter((rule) => required.includes(rule));
-    assert.deepEqual(overlap, [], 'a rule cannot be both required and obsolete');
+      const overlap = obsolete.filter((rule) => required.includes(rule));
+      assert.deepEqual(overlap, [], `a ${kind} rule cannot be both required and obsolete`);
+    }
   });
 
   it('applies cleanly to a machine that has none of it yet', () => {
